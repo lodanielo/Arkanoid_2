@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ball : MonoBehaviour
+namespace Ball
+
 {
-
-    public float ballInitialVelocity = 800f;
-
-
-    private Rigidbody rb;
-    private bool ballInPlay;
-   
-    void Awake()
+    public class Ball : MonoBehaviour
     {
 
-        rb = GetComponent<Rigidbody>();
+        public float ballInitialVelocity = 600f;
 
-    }
 
-    void Update()
-    {
-      
+        private Rigidbody rb;
+        private bool ballInPlay;
+
+        void Awake()
+        {
+
+            rb = GetComponent<Rigidbody>();
+
+        }
+
+        void Update()
+        {
+
             if (Input.GetButtonDown("Fire1") && ballInPlay == false)
             {
                 transform.parent = null;
@@ -27,6 +30,11 @@ public class Ball : MonoBehaviour
                 rb.isKinematic = false;
                 rb.AddForce(new Vector3(ballInitialVelocity, ballInitialVelocity, 0));
             }
-        
+
+        }
+        public bool Ballinplay()
+        {
+            return ballInPlay;
+        }
     }
 }
