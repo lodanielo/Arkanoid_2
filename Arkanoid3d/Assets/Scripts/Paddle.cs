@@ -8,7 +8,7 @@ using System.Collections;
         public float MaxTimeToClick { get { return _maxTimeToClick; } set { _maxTimeToClick = value; } }  //zamiast pokazywać i umożliwiać modyfikowanie zmiennych publicznie używamy geta i seta
         public float MinTimeToClick { get { return _minTimeToClick; } set { _minTimeToClick = value; } }
 
-        //deklaracje zmiennych chyba w miarę zrozumiałe    
+        //deklaracje zmiennych   
 
         public float paddleSpeed = 1f;
         private float xPos;
