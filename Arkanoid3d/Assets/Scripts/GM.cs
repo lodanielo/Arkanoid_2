@@ -11,12 +11,15 @@ using UnityEngine.UI;
         public int bricks = 20;
         public float resetDelay = 1f;
         public Text livesText;
+        public Text timeTextW;
+        public Text timeTextL;
         public GameObject gameOver;
         public GameObject youWon;
         public GameObject bricksPrefab;
         public GameObject paddle;
         public GameObject deathParticles;
         public static GM instance = null;
+        
 
         private float posx;
 
@@ -36,6 +39,10 @@ using UnityEngine.UI;
         }
 
 
+        
+            
+
+
 
         public void Setup()
         {
@@ -47,13 +54,16 @@ using UnityEngine.UI;
         {
             if (bricks < 1)
             {
+                timeTextW.text = "YOU WON \r\n Time: " +Time.time + "s";
                 youWon.SetActive(true);
+                
                 Time.timeScale = .25f;
                 Invoke("Reset", resetDelay);
             }
 
             if (lives < 1)
             {
+                timeTextL.text = "GAME OVER \r\n Time: " + Time.time + "s";
                 gameOver.SetActive(true);
                 Time.timeScale = .25f;
                 Invoke("Reset", resetDelay);

@@ -8,9 +8,11 @@ using System.Collections;
         public float MaxTimeToClick { get { return _maxTimeToClick; } set { _maxTimeToClick = value; } }  //zamiast pokazywać i umożliwiać modyfikowanie zmiennych publicznie używamy geta i seta
         public float MinTimeToClick { get { return _minTimeToClick; } set { _minTimeToClick = value; } }
 
-        //deklaracje zmiennych   
+        //deklaracje zmiennych chyba w miarę zrozumiałe    
 
         public float paddleSpeed = 1f;
+        public float paddleSpeeda = 1f;
+        public float paddleSpeedax = 1f;
         private float xPos;
         private bool currentPlatformAndroid = false;
 
@@ -21,9 +23,11 @@ using System.Collections;
         private float MinOffset = -8f;
         private float MaxOffset = 8f;
         private float cPosition;
- 
+        private bool gamePaused = false;
 
-        private Rigidbody rb;
+
+
+    private Rigidbody rb;
 
 
     //private Vector3 translateVector = new Vector3(10.0f, 0.0f, 0.0f); //to na razie nie używane
@@ -72,15 +76,22 @@ using System.Collections;
         
             if (currentPlatformAndroid == true)                     //jeśli kod jest skompilowany na system Android to wykonujemy metodę zawierającą sterowanie dla systemów mobilnych
              {
-            
-                 //  Accelerator();
-
-                     TouchMove();
-            
-        }
-            else
+            if (gamePaused == false)
             {
-                MoveAxis();                                         //jeśli kod nie jest skompilowany na Androida uruchamiamy metodę MoveAxis zawierającą sterowanie dla systemów desktopowych
+                TouchMove();
+                //Accelerator();
+            }
+
+        }
+        else
+        {
+            if (gamePaused == false)
+            {
+                MoveAxis();
+            }
+
+             
+                                            //jeśli kod nie jest skompilowany na Androida uruchamiamy metodę MoveAxis zawierającą sterowanie dla systemów desktopowych
         }
 
 
@@ -92,9 +103,39 @@ using System.Collections;
              transform.Translate(Input.touches[0].Position.x * paddleSpeed, 0, 0);
          }*/
 
-
         
 
+
+
+        Exit();
+        Pause();
+
+        }
+
+
+         private bool Pause()                                               //metoda pauzy w grze po przeczytaniu komentarzy metody Exit chyba w miarę prosta
+    {
+        if (Input.GetKeyDown(KeyCode.Menu))
+        {
+            if (gamePaused)
+            {
+                Time.timeScale = 1;
+                gamePaused = false;
+                
+            }
+            else
+            {
+                Time.timeScale = 0;
+                gamePaused = true;
+            }
+        }
+        return gamePaused;
+
+    }
+
+
+        private void Exit()
+    {
         //EXIT
         /*
             Jeśli użytkownik kliknie przycisk wyjścia to rozpoczynamy wykonywanie bloku kodu poniżej tego komentarza
@@ -110,23 +151,23 @@ using System.Collections;
         if (Input.GetKeyDown(KeyCode.Escape))                                               //Czekamy na kliknięcie przyciku wyjścia btw. bo to powtarzam a co to jest - jest to standardowy przycik wyjścia w danym systemie:
         {                                                                                   //w Widows klawisz ESC, Android ta śmieszna strzałka czy jakkolwiek macie to oznaczone jeden z dwóch skrajnych przycisków pod ekranem 
             if (Time.time > _minCurrentTime && Time.time < _maxCurrentTime)                 //sprawdzamy czy aktualny czas działania aplikacji mieści się w naszych widełkach
-                {
- 
-                    _minCurrentTime = 0;                                                    //resetujemy zmienne, na wszelki wypadek jakby coś poszło nie tak ("przezorny zawsze ubezpieczony" itp.)
-                    _maxCurrentTime = 0;
+            {
 
-                    Application.Quit();                                                     //wychodzimy z aplikacji
-                }
-                _minCurrentTime = Time.time + MinTimeToClick;                               //przypisujemy wartość
-                _maxCurrentTime = Time.time + MaxTimeToClick;
+                _minCurrentTime = 0;                                                    //resetujemy zmienne, na wszelki wypadek jakby coś poszło nie tak ("przezorny zawsze ubezpieczony" itp.)
+                _maxCurrentTime = 0;
+
+                Application.Quit();                                                     //wychodzimy z aplikacji
             }
 
+            _minCurrentTime = Time.time + MinTimeToClick;                               //przypisujemy wartość
+            _maxCurrentTime = Time.time + MaxTimeToClick;
+
         }
+    }       
 
-
-        void TouchMove()                                                                    //sterowanie dotykiem
+       private void TouchMove()                                                                    //sterowanie dotykiem
         {
-
+        
 
 
             if (Input.touchCount > 0)
@@ -135,11 +176,11 @@ using System.Collections;
                 float middle = Screen.width / 2;                                            //tworzymy nową zmienną i przypisujemy jej wartość wynoszącą połowę szerokości ekranu w pikselach
 
 
-                if (touch.position.x < middle && touch.phase == TouchPhase.Stationary)      //sprawdzamy czy dotknięcie było z lewej czy z prawej strony (od środka) ekranu  i wykonujemy odpowiednią metodę
+                if (touch.position.x < middle)                                              //sprawdzamy czy dotknięcie było z lewej czy z prawej strony (od środka) ekranu  i wykonujemy odpowiednią metodę
             {
                     MoveLeft();
                 }
-                if (touch.position.x > middle && touch.phase == TouchPhase.Stationary)
+                if (touch.position.x > middle)
                 {
                     MoveRight();
                 }
@@ -148,15 +189,15 @@ using System.Collections;
 
         }
 
-    public void MoveAxis()                                              //sterowanie desktopowe 
+    private void MoveAxis()                                              //sterowanie desktopowe 
     {
-        xPos = transform.position.x + (Input.GetAxis("Horizontal") * paddleSpeed);  //przypisujemy zmiennej wartość wynoszącą aktualnoą pozycję paletki + obsługę stadardowego wejścia osi czyli strzałek dla klawiatur i oś x dla jostików, padów
+        xPos = transform.position.x + (Input.GetAxis("Horizontal") * paddleSpeedax);  //przypisujemy zmiennej wartość wynoszącą aktualnoą pozycję paletki + obsługę stadardowego wejścia osi czyli strzałek dla klawiatur i oś x dla jostików, padów
         playerPos = new Vector3(Mathf.Clamp(xPos, -8f, 8f), -9.5f, 0f);             //przypisujemy zmiennej wartość obiektowi klasy Vector3 przymującemu takie wartości(x,y,z) wartości stałe dla osi y i z
                                                                                     //oraz metodę Mathf.Clamp sprawdzającą czy dla podanego argumentu warości mieszą się w podanym przedziale (argument, min, max)
         transform.position = playerPos;                                             //zmieniamy pozycję paletki
     }
 
-    public void MoveLeft()                                             // Ruch w lewo - to jeszcze będe optymalizował wię narazie nie komentuje
+    private void MoveLeft()                                             // Ruch w lewo - to jeszcze będe optymalizował wię narazie nie komentuje
     {
         cPosition = transform.position.x;
 
@@ -169,7 +210,7 @@ using System.Collections;
 
 
     }
-    public void MoveRight()                                             // Ruch w prawo
+    private void MoveRight()                                             // Ruch w prawo
     {
 
 
@@ -181,9 +222,9 @@ using System.Collections;
         }
     }
 
-    /*void Accelerator()                                                                //sterowanie akceleratorem
+    private void Accelerator()                                                                //sterowanie akceleratorem
     {
-        xPos = transform.position.x + (Input.acceleration.x * paddleSpeed);  
+        xPos = transform.position.x + (Input.acceleration.x * paddleSpeeda);  
         playerPos = new Vector3(Mathf.Clamp(xPos, MinOffset, MaxOffset), -9.5f, 0f);
         transform.position = playerPos;
     }
@@ -191,7 +232,7 @@ using System.Collections;
     //poniżej testy
 
 
-    
+    /*
     public void MoveLeft()                                                              //to też się nie rusza
      {
          rb.velocity=new Vector3(Mathf.Clamp(paddleSpeed, -8f, 8f), 0f, 0f);
