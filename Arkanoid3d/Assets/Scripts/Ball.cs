@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Ball
 
-{
+
+
     public class Ball : MonoBehaviour
     {
 
@@ -22,19 +22,21 @@ namespace Ball
 
         void Update()
         {
+            
 
-            if (Input.GetButtonDown("Fire1") && ballInPlay == false)
-            {
-                transform.parent = null;
-                ballInPlay = true;
-                rb.isKinematic = false;
-                rb.AddForce(new Vector3(ballInitialVelocity, ballInitialVelocity, 0));
-            }
+                if (Input.GetButtonDown("Fire1") && ballInPlay == false)
+                {
+                    transform.parent = null;
+                    ballInPlay = true;
+                    rb.isKinematic = false;
+                    rb.AddForce(new Vector3(ballInitialVelocity, ballInitialVelocity, 0));
+                }
+            
 
         }
-        public bool Ballinplay()
-        {
-            return ballInPlay;
-        }
+        public bool BallInPlay()
+    {
+        return ballInPlay;
     }
-}
+        
+    }

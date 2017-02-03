@@ -78,7 +78,11 @@ using System.Collections;
              {
             if (gamePaused == false)
             {
-                TouchMove();
+
+
+               
+               
+                    TouchMove();
                 //Accelerator();
             }
 
@@ -228,6 +232,28 @@ using System.Collections;
         playerPos = new Vector3(Mathf.Clamp(xPos, MinOffset, MaxOffset), -9.5f, 0f);
         transform.position = playerPos;
     }
+
+    public bool Fire()
+    {
+        bool fire = false;
+       
+           
+            
+            if (Input.GetButtonDown("Fire1")) 
+            { 
+                
+                    fire = true;
+                     
+                }
+
+                
+        
+            
+        
+        return fire;
+    }
+    
+           
 
     //poniżej testy
 

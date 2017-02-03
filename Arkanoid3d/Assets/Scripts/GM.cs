@@ -17,11 +17,16 @@ using UnityEngine.UI;
         public GameObject youWon;
         public GameObject bricksPrefab;
         public GameObject paddle;
+	public GameObject lvl1;
+	public GameObject lvl2;
         public GameObject deathParticles;
         public static GM instance = null;
-        
+        private static float playTime=0f;
+        private float cTime = 0f;
+	public Vector3 plvl = new Vector3(-2.703976f, 2.211683f, -5.481205f);
+	public static int lvl=1;
 
-        private float posx;
+
 
         private GameObject clonePaddle;
 
@@ -34,7 +39,8 @@ using UnityEngine.UI;
             else if (instance != this)
                 Destroy(gameObject);
 
-            Setup();
+            Setup(lvl);
+
 
         }
 
@@ -44,38 +50,67 @@ using UnityEngine.UI;
 
 
 
-        public void Setup()
+	public void Setup(int level)
         {
             clonePaddle = Instantiate(paddle, transform.position, Quaternion.identity) as GameObject;
             Instantiate(bricksPrefab, transform.position, Quaternion.identity);
+		if (level == 1) 
+		{
+			Instantiate(lvl1, transform.position, Quaternion.identity);
+		}
+
+		if (level == 2) 
+		{
+			Instantiate(lvl2, transform.position, Quaternion.identity);
+		}
+
+		if (level > 2) 
+		{
+			Instantiate(lvl1, transform.position, Quaternion.identity);
+			level = 1;
+		}
         }
 
         void CheckGameOver()
         {
             if (bricks < 1)
             {
-                timeTextW.text = "YOU WON \r\n Time: " +Time.time + "s";
+                cTime = Time.time;
+                cTime = cTime - playTime;
+                timeTextW.text = "YOU WON \r\n Time: " + cTime + "s";
                 youWon.SetActive(true);
                 
                 Time.timeScale = .25f;
+                playTime = Time.time;
                 Invoke("Reset", resetDelay);
+				lvl++;
+
             }
 
             if (lives < 1)
             {
-                timeTextL.text = "GAME OVER \r\n Time: " + Time.time + "s";
+                cTime = Time.time;
+                cTime = cTime - playTime;
+                timeTextL.text = "GAME OVER \r\n Time: " + cTime + "s";
                 gameOver.SetActive(true);
                 Time.timeScale = .25f;
+                playTime = Time.time;
                 Invoke("Reset", resetDelay);
+
             }
+			
+			
 
         }
 
         void Reset()
         {
+		
             Time.timeScale = 1f;
             Application.LoadLevel(Application.loadedLevel);
-        }
+
+
+    }
 
         public void LoseLife()
         {
@@ -98,8 +133,5 @@ using UnityEngine.UI;
             CheckGameOver();
         }
 
-        public float Getposx()
-        {
-            return posx;
-        }
+       
     }
