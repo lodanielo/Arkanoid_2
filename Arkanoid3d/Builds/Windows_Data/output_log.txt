@@ -5,7 +5,7 @@ Direct3D:
     Renderer: NVIDIA GeForce GTX 960 (ID=0x1401)
     Vendor:   NVIDIA
     VRAM:     3072 MB
-    Driver:   21.21.13.7270
+    Driver:   21.21.13.7653
 Begin MonoManager ReloadAssembly
 Platform assembly: D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.dll (this message is harmless)
 Loading D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.dll into Unity Child Domain
@@ -17,51 +17,32 @@ Platform assembly: D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.N
 Loading D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.049 seconds
+- Completed reload, in  0.058 seconds
 Platform assembly: D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\unity\Arkanoid3d\Builds\Windows_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 2.095573 ms
+UnloadTime: 2.144401 ms
 Other system
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Other system
+NullReferenceException: Object reference not set to an instance of an object
+  at Paddle.Start () [0x00000] in <filename unknown>:0 
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename:  Line: -1)
 
 Other system
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 82c -> priority: 1 
-Other system
+  Thread -> id: 45e8 -> priority: 1 
+NullReferenceException: Object reference not set to an instance of an object
+  at Paddle.Pause () [0x00000] in <filename unknown>:0 
+  at Paddle.Update () [0x00000] in <filename unknown>:0 
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Other system
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 9.795826 ms
-
-Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 672.
-Total: 0.426081 ms (FindLiveObjects: 0.047895 ms CreateObjectMapping: 0.048517 ms MarkObjects: 0.305410 ms  DeleteObjects: 0.011818 ms)
-
-Other system
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Other system
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Other system
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename:  Line: -1)
 

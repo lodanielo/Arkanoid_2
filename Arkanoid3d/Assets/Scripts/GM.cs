@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 
     public class GM : MonoBehaviour
     {
 
-        public int lives = 3;
+
         public int bricks = 20;
         public float resetDelay = 1f;
         public Text livesText;
@@ -16,15 +16,22 @@ using UnityEngine.UI;
         public GameObject gameOver;
         public GameObject youWon;
         public GameObject bricksPrefab;
-        public GameObject paddle;
+	public GameObject paddle;
 	public GameObject lvl1;
 	public GameObject lvl2;
+	public GameObject lvl3;
         public GameObject deathParticles;
         public static GM instance = null;
         private static float playTime=0f;
         private float cTime = 0f;
-	public Vector3 plvl = new Vector3(-2.703976f, 2.211683f, -5.481205f);
 	public static int lvl=1;
+	public bool paddle_touch = false;
+	public static int score=0;
+	public static int lives_global=3;
+	public int lives = lives_global;
+	public static string playername="rezor";
+
+
 
 
 
@@ -38,7 +45,8 @@ using UnityEngine.UI;
                 instance = this;
             else if (instance != this)
                 Destroy(gameObject);
-
+		lives = lives_global;
+		livesText.text = "Lives: " + lives;
             Setup(lvl);
 
 
@@ -64,38 +72,68 @@ using UnityEngine.UI;
 			Instantiate(lvl2, transform.position, Quaternion.identity);
 		}
 
-		if (level > 2) 
+		if (level == 3) 
+		{
+			Instantiate(lvl3, transform.position, Quaternion.identity);
+		}
+
+		if (level > 3) 
 		{
 			Instantiate(lvl1, transform.position, Quaternion.identity);
-			level = 1;
+			lvl = 1;
 		}
         }
 
         void CheckGameOver()
         {
-            if (bricks < 1)
+		if (bricks < 1 && lvl<4)
+		{
+			cTime = Time.time;
+			cTime = cTime - playTime;
+			timeTextW.text = "Next level \r\n Score: " + score + "  \r\n Time: " + cTime + "s";
+			youWon.SetActive(true);
+			lives_global = lives;
+			Time.timeScale = .25f;
+			playTime = Time.time;
+			Invoke("Reset", resetDelay);
+			lvl++;
+
+		}
+
+		if (bricks < 1 && lvl==4)
             {
                 cTime = Time.time;
-                cTime = cTime - playTime;
-                timeTextW.text = "YOU WON \r\n Time: " + cTime + "s";
+			timeTextW.text = "YOU WON \r\n Score: " + score + "  \r\n Time: " + cTime + "s";
+			PlayerPrefs.SetString ("Player Name", playername);
+			PlayerPrefs.Save ();
+			PlayerPrefs.SetInt ("Player Score", score);
+			PlayerPrefs.Save ();
                 youWon.SetActive(true);
-                
+			lives_global = 3;
                 Time.timeScale = .25f;
-                playTime = Time.time;
+                
                 Invoke("Reset", resetDelay);
-				lvl++;
+			++lvl;
 
             }
 
             if (lives < 1)
             {
+				lives_global = 3;
                 cTime = Time.time;
                 cTime = cTime - playTime;
-                timeTextL.text = "GAME OVER \r\n Time: " + cTime + "s";
+			timeTextL.text = "GAME OVER \r\n Score: " + score + "  \r\n Time: " + cTime + "s";
+			PlayerPrefs.SetString ("Player Name", playername);
+			PlayerPrefs.Save ();
+			PlayerPrefs.SetInt ("Player Score", score);
+			PlayerPrefs.Save ();
                 gameOver.SetActive(true);
                 Time.timeScale = .25f;
+				score = 0;
                 playTime = Time.time;
+				lvl = 1;
                 Invoke("Reset", resetDelay);
+
 
             }
 			
@@ -114,7 +152,8 @@ using UnityEngine.UI;
 
         public void LoseLife()
         {
-            lives--;
+		
+		lives--;
             livesText.text = "Lives: " + lives;
             Instantiate(deathParticles, clonePaddle.transform.position, Quaternion.identity);
             Destroy(clonePaddle);
@@ -131,6 +170,7 @@ using UnityEngine.UI;
         {
             bricks--;
             CheckGameOver();
+			score++;
         }
 
        

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 
@@ -24,8 +25,22 @@ using System.Collections;
         private float MaxOffset = 8f;
         private float cPosition;
         private bool gamePaused = false;
+	public static bool touch=true;
+	public static bool accel=false;
 
 
+
+
+	public GameObject score;
+	public GameObject menu;
+	public GameObject options;
+	public Button exitbutton;
+	public Button optionsbutton;
+	public Button savebutton;
+	public Slider controlslider;
+	public Button scorebutton;
+	public Text nametext;
+	public Text scoretext;
 
     private Rigidbody rb;
 
@@ -67,12 +82,19 @@ using System.Collections;
 
             }
             transform.position = new Vector3(0f, -9.5f, 0f);        //ustawiamy pozycję naszej paletki (x,y,z)
+
+
+		exitbutton.onClick.AddListener (OnClick_exit);
+		optionsbutton.onClick.AddListener (OnClick_options);
+		savebutton.onClick.AddListener (OnClick_save);
+		scorebutton.onClick.AddListener (OnClick_score);
+
         }
         void Update()                                               //Metoda Update tutaj wprowadzamy wszelkie zmiany wykonywane po starcie aplikacji
         {
 
         
-        
+
         
             if (currentPlatformAndroid == true)                     //jeśli kod jest skompilowany na system Android to wykonujemy metodę zawierającą sterowanie dla systemów mobilnych
              {
@@ -81,9 +103,14 @@ using System.Collections;
 
 
                
-               
-                    TouchMove();
-                //Accelerator();
+				if (touch==true) {
+					TouchMove ();
+				}
+				if (accel==true) {
+					Accelerator();
+				}
+
+                
             }
 
         }
@@ -112,27 +139,33 @@ using System.Collections;
 
 
         Exit();
-        Pause();
+
+			Pause ();
 
         }
 
 
          private bool Pause()                                               //metoda pauzy w grze po przeczytaniu komentarzy metody Exit chyba w miarę prosta
     {
-        if (Input.GetKeyDown(KeyCode.Menu))
-        {
-            if (gamePaused)
-            {
-                Time.timeScale = 1;
-                gamePaused = false;
+		
+		if (Input.GetKeyDown (KeyCode.Menu) || Input.GetKeyDown (KeyCode.Space)) {
+			if (gamePaused) {
+				
+				Time.timeScale = 1;
+				gamePaused = false;
+				menu.SetActive (false);
+				options.SetActive (false);
                 
-            }
-            else
-            {
-                Time.timeScale = 0;
-                gamePaused = true;
-            }
-        }
+			} else {
+				
+				Time.timeScale = 0;
+				gamePaused = true;
+				menu.SetActive (true);
+
+
+			}
+
+		}
         return gamePaused;
 
     }
@@ -233,25 +266,7 @@ using System.Collections;
         transform.position = playerPos;
     }
 
-    public bool Fire()
-    {
-        bool fire = false;
-       
-           
-            
-            if (Input.GetButtonDown("Fire1")) 
-            { 
-                
-                    fire = true;
-                     
-                }
-
-                
-        
-            
-        
-        return fire;
-    }
+    
     
            
 
@@ -299,4 +314,44 @@ using System.Collections;
         }*/
 
 
+	void OnClick_save(){
+		if (controlslider.value == 1) {
+			touch = true;
+			accel = false;
+		}
+		if (controlslider.value == 0) {
+			touch = false;
+			accel = true;
+		}
+		if (controlslider.value == 2) {
+			touch = false;
+			accel = false;
+			MoveAxis ();
+		}
+		options.SetActive (false);
+		menu.SetActive (true);
+		score.SetActive (false);
+	}
+
+	void OnClick_options(){
+		options.SetActive (true);
+		menu.SetActive (false);
+		score.SetActive (false);
+
+	}
+
+	void OnClick_score(){
+		options.SetActive (false);
+		menu.SetActive (false);
+		score.SetActive (true);
+		GM.playername=PlayerPrefs.GetString ("Player Name");
+		nametext.text = "Playername: " + GM.playername;
+		GM.score=PlayerPrefs.GetInt ("Player Score");
+		scoretext.text += GM.score;
+	}
+
+
+	void OnClick_exit(){
+			Application.Quit(); 
+	}
 }
