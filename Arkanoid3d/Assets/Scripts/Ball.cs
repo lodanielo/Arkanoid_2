@@ -7,8 +7,8 @@ using System.Collections;
     public class Ball : MonoBehaviour
     {
 
-        public float ballInitialVelocity = 600f;
-
+        public float startVelocity = 0.7f;
+        public float ballSpeed = 10f;
 
         private Rigidbody rb;
         private bool ballInPlay;
@@ -29,14 +29,27 @@ using System.Collections;
                     transform.parent = null;
                     ballInPlay = true;
                     rb.isKinematic = false;
-                    rb.AddForce(new Vector3(ballInitialVelocity, ballInitialVelocity, 0));
+                    rb.velocity = new Vector3(startVelocity, startVelocity, 0)*ballSpeed;
+                    
                 }
-            
+              
 
         }
+        void OnCollisionEnter(Collision col)
+        {
+            if (col.transform.tag == "Paddle")
+            {
+                Vector3 vel = rb.velocity;
+                Debug.Log(vel.normalized);
+                if(vel.normalized.x>=0)
+                    rb.velocity = new Vector3(0.7f, 0.7f, 0)*ballSpeed;
+                else rb.velocity = new Vector3(-0.7f, 0.7f, 0) * ballSpeed;
+            }
+            
+        }
         public bool BallInPlay()
-    {
-        return ballInPlay;
-    }
+        {
+            return ballInPlay;
+        }
         
     }
