@@ -13,10 +13,14 @@ using System.Collections;
         private Rigidbody rb;
         private bool ballInPlay;
 
+        public GameObject deadPartical;
+        GM GM;
+
         void Awake()
         {
 
             rb = GetComponent<Rigidbody>();
+            GM = GameObject.FindGameObjectWithTag("GM").GetComponent<GM>();
 
         }
 
@@ -40,10 +44,31 @@ using System.Collections;
             if (col.transform.tag == "Paddle")
             {
                 Vector3 vel = rb.velocity;
-                Debug.Log(vel.normalized);
+               
                 if(vel.normalized.x>=0)
                     rb.velocity = new Vector3(0.7f, 0.7f, 0)*ballSpeed;
                 else rb.velocity = new Vector3(-0.7f, 0.7f, 0) * ballSpeed;
+            }
+            if (col.transform.tag == "Wall")
+            {
+                Vector3 vel = rb.velocity;
+
+                if (vel.normalized.x >= 0 && vel.normalized.y > 0)//
+                   rb.velocity = new Vector3(0.7f, 0.7f, 0) * ballSpeed;
+                if (vel.normalized.x >= 0 && vel.normalized.y < 0) //
+                    rb.velocity = new Vector3(0.7f, -0.7f, 0) * ballSpeed;
+                if (vel.normalized.x < 0 && vel.normalized.y >= 0)
+                    rb.velocity = new Vector3(-0.7f, 0.7f, 0) * ballSpeed;
+                if (vel.normalized.x <= 0 && vel.normalized.y <= 0) 
+                    rb.velocity = new Vector3(-0.7f, -0.7f, 0) * ballSpeed;
+                
+            }
+            if (col.transform.tag == "Water")
+            {
+                
+                Instantiate(deadPartical,transform.position,Quaternion.identity);
+                GM.killPlayer();
+                Destroy(gameObject);
             }
             
         }

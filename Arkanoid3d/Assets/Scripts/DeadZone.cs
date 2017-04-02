@@ -6,6 +6,6 @@ public class DeadZone : MonoBehaviour
 
     void OnTriggerEnter()
     {
-        GM.instance.LoseLife();
+        
     }
 }
